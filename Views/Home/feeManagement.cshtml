@@ -1,0 +1,188 @@
+﻿
+@{
+    ViewBag.Title = "feeManagement";
+    Layout = "~/Views/Shared/GeneralLayout.cshtml";
+}
+
+<style>
+    #nextinstall {
+        display: none;
+    }
+</style>
+
+<h3 class="text-center text-secondary my-4">
+    Fee <span class="text-danger">&nbsp;Management..!</span>
+</h3>
+@if (Model != null)
+{
+    if (Model.Rows.Count > 0)
+    {
+        <p>Total Records : <span class="text-primary">@Model.Rows.Count</span></p>
+        int i = 0;
+        <div style="overflow:auto;">
+            <table class="table table-bordered" id="mytable">
+                <thead class="table-primary text-dark">
+                    <tr>
+                        <th>Sr</th>
+                        <th>Enroll Id</th>
+                        <th>Name</th>
+                        <th>Total Fee</th>
+                        <th>Discount</th>
+                        <th>Final Fee</th>
+                        <th>Submitted Fee</th>
+                        <th>Remaining</th>
+                        <th>Mode</th>
+                        <th>Fee Date</th>
+                        <th>Next Installment Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (System.Data.DataRow dt in Model.Rows)
+                    {
+                        i++;
+                        <tr>
+                            <td>@i</td>
+                            <td>@dt["enrollId"]</td>
+                            <td>@dt["studentname"]</td>
+                            <td>@dt["totalfee"]</td>
+                            <td>@dt["discount"]</td>
+                            <td>@dt["finalfee"]</td>
+                            @{int subfee = Convert.ToInt32(dt["subfee"]) + Convert.ToInt32(dt["regfee"]);}
+                            <td id="subfee_@i">@subfee</td>
+                            <td id="remain_@i">@dt["remaining"]</td>
+                            <td id="mode_@i">@dt["feemode"]</td>
+                            <td>@Convert.ToDateTime(dt["feedate"]).ToString("dd-MM-yyyy")</td>
+                            <td>
+                                @if (Convert.ToInt32(dt["remaining"]) != 0)
+                                {
+                                    @Convert.ToDateTime(dt["nextinstallment"]).ToString("dd-MM-yyyy")
+                                }
+                                else
+                                {
+                                    <span class="text-secondary">Completed</span>
+                                }
+                            </td>
+                            <td>
+                                @if (Convert.ToInt32(dt["remaining"]) != 0)
+                                {
+                                    <a class="btn btn-info text-light" data-toggle="modal" onclick="setfeedata(@i,'@dt["enrollid"]')" data-target="#exampleModal">Update Fee</a>
+
+                                }
+                                else
+                                {
+                                    @:<center><i class="fa-solid fa-check text-primary" style="text-shadow:2px 1px 2px black;font-size:20px;"></i></center>
+                                }
+                                <a class="btn btn-danger text-light mt-2" href="/home/feeinvoice?id=@dt["enrollid"]">Print Reciept</a>
+                            </td>
+
+
+                        </tr>
+                    }
+
+
+
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <h3 class="text-center text-secondary">Records Not Found</h3>
+
+    }
+
+}
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title font-weight-bold" id="exampleModalLabel">
+                    Update Fee <span class="text-danger">Here..!</span>
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="border p-4 rounded" method="post" action="/home/updateFee">
+                    <input type="text" name="enrollid" id="enrollid" hidden />
+                    <div class="w-100">
+                        <b>Submitted Fee</b>
+                        <input type="number" id="subfee" name="subfee" required placeholder="Student Submitted Fee" class="form-control" />
+                    </div>
+                    <div class="w-100 my-2">
+                        <b>Mode</b>
+                        <select name="feemode" class="form-control" required>
+                            <option disabled>--Select Mode--</option>
+                            <option>Online</option>
+                            <option>Offline</option>
+                        </select>
+                    </div>
+                    <div class="w-100">
+                        <b>Fee Date</b><br />
+                        <input type="Date" name="feedate" value="@Convert.ToDateTime(DateTime.Now).ToString("yyyy-MM-dd")" id="feedate" required class="form-control" />
+                    </div>
+                    <div class="w-100 my-2">
+                        <b>Remaining Fee</b><br />
+                        <input type="number" name="remaining" id="remaining" readonly class="form-control" />
+                    </div>
+                    <div class="w-100" id="nextinstall">
+                        <b>Next Installment Date</b>
+                        <input type="date" name="nextinstdate" id="nextinstdate" class="form-control" />
+                    </div>
+                    <input type="submit" value="Update Fee" class="btn btn-primary font-weight-bold mt-3" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    //data table
+    //set data in modal for update fee
+    let backupfee;
+    function setfeedata(id, enrollid) {
+        $("#remaining").val($("#remain_" + id).text())
+        backupfee = $("#remaining").val();
+        $("#enrollid").val(enrollid)
+    }
+
+    //Calculate remaining fee According to sub fee
+    let clear;
+    document.getElementById("subfee").addEventListener("focus", function () {
+        clear = setInterval(() => {
+            if (Number(this.value) > Number(backupfee)) {
+                this.value = backupfee;
+            } else {
+                $("#remaining").val(backupfee - this.value)
+            }
+            nextinst();
+        }, 500)
+    })
+    document.getElementById("subfee").addEventListener("blur", function () {
+        clearInterval(clear);
+    })
+    //installation date show or hide base on submitted fee
+    function nextinst() {
+        if ($("#remaining").val() > 0) {
+            $("#nextinstall").css({ display: "block" });
+            document.getElementById("nextinstdate").setAttribute("min", $("#feedate").val());
+            document.getElementById("nextinstdate").setAttribute("required", "")
+        } else {
+            $("#nextinstall").css({ display: "none" });
+            document.getElementById("nextinstdate").removeAttribute("min");
+            document.getElementById("nextinstdate").removeAttribute("required")
+        }
+    }
+
+    //restriction on nextinstallment
+    document.getElementById("feedate").addEventListener("change", function () {
+        nextinst()
+    })
+</script>

@@ -1,0 +1,201 @@
+﻿<!DOCTYPE html>
+
+<html>
+
+<head>
+    <!-- basic -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- mobile metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <!-- site metas -->
+    <title>SMS</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- site icon -->
+    <link rel="icon" href="~/Content/images/fevicon.png" type="image/png" />
+    <!-- bootstrap css -->
+    <link rel="stylesheet" href="~/Content/css/bootstrap.min.css" />
+    <!-- site css -->
+    <link rel="stylesheet" href="~/Content/style.css" />
+    <!-- responsive css -->
+    <link rel="stylesheet" href="~/Content/css/responsive.css" />
+    <!-- select bootstrap -->
+    <link rel="stylesheet" href="~/Content/css/bootstrap-select.css" />
+    <!-- scrollbar css -->
+    <link rel="stylesheet" href="~/Content/css/perfect-scrollbar.css" />
+    <!-- custom css -->
+    <link rel="stylesheet" href="~/Content/css/custom.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="~/Content/dataTables.min.css" rel="stylesheet" />
+
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.~/Content/js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+   <body>
+
+       <style>
+           .dropdown-menu {
+               width: 300px;
+               position: fixed;
+               top: 10%;
+               left: 80%;
+           }
+           #main{
+               min-height:60vh;
+           }
+           form{
+               min-width:300px;
+           }
+           ::-webkit-scrollbar-track {
+               -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+               background-color: #F5F5F5;
+               border-radius: 10px;
+           }
+
+           ::-webkit-scrollbar {
+               width: 5px;
+               height:5px;
+               background-color: #F5F5F5;
+           }
+
+           ::-webkit-scrollbar-thumb {
+               background-color: #AAA;
+               border-radius: 10px;
+               background-image: -webkit-linear-gradient(90deg, rgba(0, 0, 0, .2) 25%, transparent 25%, transparent 50%, rgba(0, 0, 0, .2) 50%, rgba(0, 0, 0, .2) 75%, transparent 75%, transparent)
+           }
+
+
+
+       </style>
+
+       <div class="full_container">
+           <div class="inner_container">
+               <!-- Sidebar  -->
+               <nav id="sidebar">
+                   <div class="sidebar_blog_1">
+                       <div class="sidebar-header">
+                           <div class="logo_section">
+                               <a href="/home/index"><img class="logo_icon img-responsive" src="~/Content/images/logo/logo_icon.png" alt="#" /></a>
+                           </div>
+                       </div>
+                       <div class="sidebar_user_info">
+                           <div class="icon_setting"></div>
+                           <div class="user_profle_side">
+                               <div class="user_info">
+                                   <p><span class="online_animation"></span> @User.Identity.Name</p>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+                   <div class="sidebar_blog_2">
+                       <ul class="list-unstyled components">
+                           <li class="active">
+                               <a href="/home/index"><i class="fa fa-dashboard yellow_color"></i> <span>Dashboard</span></a>
+                           </li>
+                           <li><a href="/home/AddCollege">
+    <i class="fa-solid fa-building-columns orange_color"></i>
+    </i> <span>Add College</span>
+</a></li>
+                           <li>
+                               <a href="/home/AddTraining"><i class="fa-solid fa-list-check purple_color"></i> <span>Add Training</span></a>
+                           </li>
+                           <li>
+                               <a href="/home/AddWorkshop">
+                                   <i class="fa-solid fa-warehouse blue2_color"></i>
+                                   <span>Add Workshop</span>
+                               </a>
+                           </li>
+                           <li><a href="/home/AddWorkshopDatas">
+    <i class="fa-solid fa-mountain-city blue1_color"></i>
+    <span>Add Workshop Data</span>
+</a></li>
+                           <li>
+                               <a href="/home/AddRegisteration">
+                                   <i class="fa-solid fa-id-card red_color"></i>
+                                   <span>Add Registeration</span>
+                               </a>
+                           </li>
+                           <li><a href="/home/AddEnrollment"><i class="fa fa-table purple_color2"></i> <span>Add Enrollment</span></a></li>
+
+                       </ul>
+                   </div>
+               </nav>
+               <!-- end sidebar -->
+               <!-- right content -->
+               <div id="content">
+                   <!-- topbar -->
+                   <div class="topbar">
+                       <nav class="navbar navbar-expand-lg navbar-light">
+                           <div class="full">
+                               <button type="button" id="sidebarCollapse" class="sidebar_toggle"><i class="fa fa-bars"></i></button>
+                               <div class="logo_section">
+                                   <a href="/home/index"><img class="img-responsive" src="~/Content/images/logo/logo.png" alt="#" /></a>
+                               </div>
+                               <div class="right_topbar">
+                                   <div class="icon_info">
+
+                                       <ul class="user_profile_dd">
+                                           <li>
+                                               <a class="dropdown-toggle" data-toggle="dropdown"><span class="font-weight-bold">Management</span></a>
+                                               <div class="dropdown-menu">
+                                                   <a class="dropdown-item" href="/home/feemanagement">Fee Management</a>
+                                                   <a class="dropdown-item" href="/home/feehistory">Fee History</a>
+                                                   <a class="dropdown-item" href="/home/collagemanagement">Collage Management</a>
+                                                   <a class="dropdown-item" href="/home/trainingmanagement">Training Management</a>
+                                                   <a class="dropdown-item" href="/home/workshop">Workshop Management</a>
+                                                   <a class="dropdown-item" href="/home/workshopmanagement">Workshop Data Management</a>
+                                                   <a class="dropdown-item" href="/home/RegisterationManagement">Registeration Management</a>
+                                                   <a class="dropdown-item" href="/home/enrollManagement">Enrollment Management</a>
+                                                   <a class="dropdown-item" href="/home/Signout"><span>Log Out</span> <i class="fa fa-sign-out"></i></a>
+                                               </div>
+                                           </li>
+                                       </ul>
+                                   </div>
+                               </div>
+                           </div>
+                       </nav>
+                   </div>
+                   <!-- end topbar -->
+                   <div id="main">
+                       @RenderBody()
+                   </div>
+                   <div class="footer">
+                       <p class="text-center">
+                           Copyright © 2018 Designed by html.design. All rights reserved.<br><br>
+                           Distributed By: <a href="https://themewagon.com/">ThemeWagon</a>
+                       </p>
+                   </div>
+               </div>
+           </div>
+       </div>
+
+
+
+       <!-- jQuery -->
+       <script src="~/Content/js/jquery-3.7.1.js"></script>
+       <script src="~/Content/dataTables.min.js"></script>
+       <script src="~/Content/js/popper.min.js"></script>
+       <script src="~/Content/js/bootstrap.min.js"></script>
+       <!-- wow animation -->
+       <script src="~/Content/js/animate.js"></script>
+       <!-- select country -->
+       <script src="~/Content/js/bootstrap-select.js"></script>
+       <!-- owl carousel -->
+       <script src="~/Content/js/owl.carousel.js"></script>
+       <!-- nice scrollbar -->
+       <script src="~/Content/js/perfect-scrollbar.min.js"></script>
+       <script>
+           var ps = new PerfectScrollbar('#sidebar');
+       </script>
+       <!-- custom js -->
+       <script src="~/Content/js/custom.js"></script>
+       <script>
+           new DataTable('#mytable');
+       </script>
+   </body>
+</html>

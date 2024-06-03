@@ -1,0 +1,103 @@
+﻿
+@{
+    ViewBag.Title = "collageManagement";
+    Layout = "~/Views/Shared/GeneralLayout.cshtml";
+}
+
+<style>
+    form {
+        box-shadow: 2px 2px 10px grey;
+    }
+</style>
+
+<h3 class="text-center text-secondary my-4">
+    Collage <span class="text-danger">&nbsp;Management..!</span>
+</h3>
+@if (Model != null)
+{
+    if (Model.Rows.Count > 0)
+    {
+        <p>Total Records : <span class="text-primary">@Model.Rows.Count</span></p>
+        int i = 0;
+<div style="overflow:auto;">
+    <table class="table table-bordered" id="mytable">
+        <thead class="table-primary">
+            <tr>
+                <th>Sr</th>
+                <th>Collage Name</th>
+                <th>Collage Code</th>
+                <th>Remark</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (System.Data.DataRow dt in Model.Rows)
+            {
+                i++;
+                <tr>
+                    <td>@i</td>
+                    <td id="name_@dt["id"]">@dt["collegename"]</td>
+                    <td id="code_@dt["id"]">@dt["collgecode"]</td>
+                    <td id="remark_@dt["id"]">@dt["remark"]</td>
+                    <td class="text-center">
+                        <a class="btn btn-warning text-primary" onclick="setCollageData(@dt["id"])" data-toggle="modal" data-target="#exampleModal"><i class="fa-solid fa-pen-to-square"></i></a>
+                        <a href="/home/deleteCollage?id=@dt["id"]" onclick="return confirm('Do You Really Want To Delete?')" class="btn btn-danger"><i class="fa-regular fa-trash-can"></i></a>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+   </div>
+    }
+    else
+    {
+    <h3 class="text-center text-secondary">Records Not Found</h3>
+    }
+    }
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title font-weight-bold" id="exampleModalLabel">
+                        Update Collage Data <span class="text-danger">Here..!</span>
+                    </h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="border p-4 rounded" method="post" action="/home/editCollage">
+                        <label class="w-100">
+                            <input type="number" name="id" hidden id="id" />
+                            <b>Collage Name</b><br />
+                            <input type="text" placeholder="Please Enter Collage Name" required id="collagename" name="collegename" class="form-control" />
+                        </label>
+                        <label class="w-100">
+                            <b>Collage Code</b>
+                            <input type="text" placeholder="Please Enter Collage Code" id="collagecode" required name="collegecode" class="form-control" />
+                        </label>
+                        <label class="w-100">
+                            <b>Remark (Optional)</b>
+                            <textarea rows="5" class="form-control" id="remark" style="resize:none;" name="remark" placeholder="Write Somthing Here..."></textarea>
+                        </label>
+                        <input type="submit" value="Update Collage" class="btn btn-primary font-weight-bold" />
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function setCollageData(id) {
+            $("#collagename").val($("#name_" + id).text())
+            $("#collagecode").val($("#code_" + id).text())
+            $("#remark").val($("#remark_" + id).text())
+            $("#id").val(id)
+        }
+    </script>

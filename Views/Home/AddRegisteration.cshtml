@@ -1,0 +1,183 @@
+﻿
+@{
+    ViewBag.Title = "AddRegisteration";
+    Layout = "~/Views/Shared/GeneralLayout.cshtml";
+}
+
+
+<style>
+    .card {
+        box-shadow: 2px 2px 5px grey;
+    }
+</style>
+
+<div class="row">
+    <div class="col-sm-12 mx-auto mt-3 card px-5 py-3 shadow">
+        <h3 class="text-center">Student <span class="text-danger my-3">Registeration</span></h3>
+        <form method="post">
+            <div class="row">
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <input name="studentname" class="form-control bord" type="text" required placeholder="Enter Student Name" />
+                        </div>
+                        <div class="col-sm-6">
+
+                            <select name="course" class="form-control" required>
+                                <option disabled selected>--select Student Course--</option>
+                                <option>BCA</option>
+                                <option>B-TECH (CS)</option>
+                                <option>B-TECH (IT)</option>
+                                <option>DIPLOMA (CS)</option>
+                                <option>DIPLOMA (IT)</option>
+                                <option>PGDCA</option>
+                                <option>MCA</option>
+                                <option>BCA | COMPUTER SCIENCE | OTHER</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <select name="year" class="form-control mt-3" required>
+                                <option selected disabled>--Select Year--</option>
+                                <option>First Year</option>
+                                <option>Second Year</option>
+                                <option>Third Year</option>
+                                <option>Passed out</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-6">
+                            <input name="mobno" class="form-control bord mt-3" required type="number" placeholder="Enter Mobile Number" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <input name="email" class="form-control bord mt-3" required type="email" placeholder="Enter Email Address" />
+                        </div>
+                        <div class="col-sm-6">
+                            <!--College Drop-->
+                            <select name="collage" class="form-control mt-3" required>
+                                <option>--Select College--</option>
+                                @{
+                                    if (Model != null)
+                                    {
+                                        if (Model.Tables[0].Rows.Count > 0)
+                                        {
+                                            foreach (System.Data.DataRow x in Model.Tables[0].Rows)
+                                            {
+                                                <option value="@x["id"]">@x["collegename"]</option>
+                                            }
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <!--College end-->
+                            <!--Select drop Training-->
+                            <select onchange="training1(this)" name="training" class="form-control mt-3" required>
+                                <option selected disabled>--Select Training--</option>
+                                @{
+                                    if (Model != null)
+                                    {
+                                        if (Model.Tables[1].Rows.Count > 0)
+                                        {
+                                            foreach (System.Data.DataRow z in Model.Tables[1].Rows)
+                                            {
+                                                <option value="@z["id"]">@z["Trainingname"]</option>
+                                            }
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-sm-6">
+                            <input class='form-control mt-3' id="fee" name="fee" readonly type="number" placeholder="Training Fee">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <input id="disc" name="discount" class="form-control mt-3" required type="number" placeholder="Discount" />
+                        </div>
+                        <div class="col-sm-6">
+                            <input type="number" class="form-control mt-3" id="final" required name="finalfee" readonly placeholder="Final Fee" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <input type="number" class="form-control mt-3" id="regfee" required name="regfee" placeholder="Register Fee" />
+                        </div>
+                        <div class="col-sm-6">
+                            <input type="number" class="form-control mt-3" id="remaining" readonly name="remaining" placeholder="Remaining Fee" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 my-3">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <select name="mode" class="form-control" required>
+                                <option disabled selected>--Select Mode--</option>
+                                <option>Online</option>
+                                <option>Offline</option>
+                                <option>Not paid</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-6">
+                            <!--Select drop Training end-->
+                            <input class="form-control btn btn-outline-dark " value="Register" type="submit" />
+                        </div>
+                        </div>
+                    </div>
+                    </div>
+</form>
+    </div>
+</div>
+<!--Form Add Training end-->
+<script src="~/Content/js/jquery-3.7.1.js"></script>
+<script src="~/Content/js/sweetalert.min.js"></script>
+<script>
+    //get training fee
+    function training1(x) {
+        var id = x.value;
+        $.ajax({
+            url: '/home/Trainingfee',
+            type: 'get',
+            data: { 'id': id },
+            success: function (res) {
+                $("#disc").val("");
+                $("#final").val("");
+                $("#fee").val(res)
+
+            },
+            error: function () {
+                swal("Error", "Server side Error", "error")
+
+            }
+        })
+    }
+
+    //calculate fianl fee after discount
+    document.getElementById("disc").addEventListener("keyup", function () {
+        let dis = Number(document.getElementById("disc").value);
+        let total = Number(document.getElementById("fee").value);
+        let fee = Number(total - dis);
+        document.getElementById("final").value=fee;
+    })
+
+    document.getElementById("regfee").addEventListener("keyup", function (e) {
+        $("#remaining").val(Number($("#final").val()) - Number($("#regfee").val()));
+    })
+</script>
+

@@ -1,0 +1,116 @@
+﻿
+@{
+    ViewBag.Title = "AddWorkshopDatas";
+    Layout = "~/Views/Shared/GeneralLayout.cshtml";
+}
+
+<style>
+    #form1 {
+        box-shadow: 2px 2px 10px grey;
+    }
+</style>
+
+<form class="w-50 mx-auto my-5 border p-4 rounded" id="form1" method="post">
+    <h3 class="text-center my-3">Add Workshop Data <span class="text-danger">Here..!</span></h3>
+    <label class="w-100">
+        <b>Select Collage Name</b><br />
+        <select class="form-control" name="collage" required id="collage">
+            <option disabled selected>--select Collage name--</option>
+            @foreach (System.Data.DataRow dt in Model.Rows)
+            {
+                <option value="@dt["id"]">@dt["name"] (@Convert.ToDateTime(dt["workshopdate"]).ToString("dd-MM-yyyy"))</option>
+            }
+        </select>
+    </label>
+    <input type="button" value="&plus; Add One Data" data-toggle="modal" data-target="#exampleModal" class="btn btn-outline-primary text-bg-primary my-2 font-weight-bold" />
+    <label class="w-100 d-flex my-2">
+        <input type="file" name="file" class="form-control" style="border-radius: 4px 0 0 4px" />
+        <input type="submit" value="Upload" class="px-2 border-0 btn btn-success" style="border-radius:0 4px 4px 0" />
+    </label>
+</form>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add Student Data</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="p-2" id="form2" method="post">
+                    <div class="d-flex">
+                        <input type="text" placeholder="Enter Student Name" name="studentName" required id="studentName" class="form-control mr-1" />
+                        <select name="branch" id="branch" required class="form-control ml-1">
+                            <option disabled selected>--select Student Branch--</option>
+                            <option>BCA</option>
+                            <option>B-TECH (CS)</option>
+                            <option>B-TECH (IT)</option>
+                            <option>DIPLOMA (CS)</option>
+                            <option>DIPLOMA (IT)</option>
+                            <option>PGDCA</option>
+                            <option>MCA</option>
+                            <option>BCA | COMPUTER SCIENCE | OTHER</option>
+                        </select>
+                    </div>
+                    <div class="d-flex my-3">
+                        <input type="number" placeholder="Enter Student Mobile Number" name="mobno" required id="mobno" class="form-control mr-1" />
+                        <input type="email" placeholder="Enter Student Email" name="email" required id="email" class="form-control ml-1" />
+                    </div>
+                    <select name="year" id="year" required class="form-control">
+                        <option disabled selected>--select Student Year--</option>
+                        <option>First Year</option>
+                        <option>Second Year</option>
+                        <option>Third Year</option>
+                        <option>Fourth Year</option>
+                        <option>Passed out</option>
+                    </select>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="AddWorkshopData()">Add Data</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Content/js/jquery-3.7.1.js"></script>
+
+<script src="~/Content/js/sweetalert.min.js"></script>
+
+<script>
+    function AddWorkshopData() {
+        let collage = $("#collage").val();
+        let studentName = $("#studentName").val();
+        let branch = $("#branch").val();
+        let year = $("#year").val();
+        let mobno = $("#mobno").val();
+        let email = $("#email").val();
+        if (collage != null && studentName != "" && branch != "" && year != "" && mobno != "" & email != "") {
+            $.ajax({
+                url: "/home/AddWorkshopRecords",
+                type: "post",
+                data: { collage: collage, studentname: studentName, branch: branch, year: year, mobno: mobno, email: email },
+                success: function (res) {
+                    swal("Success", res, "success");
+                    document.getElementById("form2").reset();
+                    $("#exampleModal").modal("hide");
+                },
+                error: function () {
+                    swal("Error", "Error Occured", "error");
+                }
+
+            })
+        } else {
+            if (collage == null) {
+                swal("Choose Collage", "Please Choose Collage First", "error");
+            } else {
+                swal("All Fields Are Required!", "Please Fill All Fields", "error");
+
+            }
+        }
+    }
+</script>

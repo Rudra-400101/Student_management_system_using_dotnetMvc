@@ -1,0 +1,288 @@
+﻿
+@{
+    ViewBag.Title = "AddEnrollment";
+    Layout = "~/Views/Shared/GeneralLayout.cshtml";
+}
+
+<style>
+    #nextinstall{
+        display:none;
+    }
+</style>
+
+<form class="w-100 py-2 px-3 border" method="post">
+    <h3 class="text-center">Add <span class="text-danger my-3">Enrollment..!</span></h3>
+    <div class="row">
+        <div class="col-sm-12 my-2">
+            <big><u>Enrollment Details</u></big>
+            <div class="row mt-2">
+                <div class="col-sm-3 col-md-3">
+                    <b>Date</b><br />
+                    <input type="date" name="date" value="@Convert.ToDateTime(DateTime.Now).ToString("yyyy-MM-dd")" readonly class="form-control" />
+                </div>
+                <div class="col-sm-3 col-md-3">
+                    <b>Training Name</b><br />
+                    <select name="training" onchange="training1(this)" class="form-control" required>
+                        <option selected disabled>--Select  Training Name--</option>
+                        @{
+                            if (Model != null)
+                            {
+                                if (Model.Tables[1].Rows.Count > 0)
+                                {
+                                    foreach (System.Data.DataRow z in Model.Tables[1].Rows)
+                                    {
+                                        <option value="@z["id"]">@z["Trainingname"]</option>
+                                    }
+                                }
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-sm-3 col-md-3">
+                    <b>Enroll Mode</b><br />
+                    <select name="enrollmode" class="form-control" required>
+                        <option selected disabled>--Select Enroll Mode--</option>
+                        <option>Employee</option>
+                        <option>New</option>
+                        <option>Registered</option>
+                    </select>
+                </div>
+                <div class="col-sm-3 col-md-3">
+                    <b>Enroll Id</b>
+                    <input type="text" name="enrollid" id="enrollId" placeholder="Enroll Id" readonly class="form-control" />
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 my-2">
+            <big><u>Basic Details</u></big>
+            <div class="row mt-2">
+                <div class="col-sm-3 col-md-3">
+                    <b>Student Name</b><br />
+                    <input type="text" required name="studentname" placeholder="Enter Student Name" class="form-control" />
+                </div>
+                <div class="col-sm-3  col-md-3">
+                    <b>Guardian Name</b><br />
+                    <input type="text" name="gname" required class="form-control" placeholder="Enter Student Guardian Name" />
+                </div>
+                <div class="col-sm-3  col-md-3">
+                    <b>Collage Name</b><br />
+                    <select name="collage" class="form-control" required>
+                        <option>--Select College--</option>
+                        @{
+                            if (Model != null)
+                            {
+                                if (Model.Tables[0].Rows.Count > 0)
+                                {
+                                    foreach (System.Data.DataRow x in Model.Tables[0].Rows)
+                                    {
+                                        <option value="@x["id"]">@x["collegename"]</option>
+                                    }
+                                }
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-sm-3  col-md-3">
+                    <b>Course</b>
+                    <select name="course" class="form-control" required>
+                        <option disabled selected>--select Student Course--</option>
+                        <option>BCA</option>
+                        <option>B-TECH (CS)</option>
+                        <option>B-TECH (IT)</option>
+                        <option>DIPLOMA (CS)</option>
+                        <option>DIPLOMA (IT)</option>
+                        <option>PGDCA</option>
+                        <option>MCA</option>
+                        <option>BCA | COMPUTER SCIENCE | OTHER</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="row">
+                <div class="col-sm-3  col-md-3">
+                    <b>Year</b><br />
+                               <select name="year" class="form-control" required>
+                                   <option>--Select Year--</option>
+                                   <option>First Year</option>
+                                   <option>Second Year</option>
+                                   <option>Third Year</option>
+                                   <option>Fourth Year</option>
+                                   <option>Passed out</option>
+                               </select>
+                </div>
+                <div class="col-sm-3  col-md-3">
+                    <b>Email Id</b><br />
+                    <input type="email" name="email" required placeholder="Enter Student Email Address" class="form-control" />
+                </div>
+                <div class="col-sm-3  col-md-3">
+                    <b>Mobile Number</b><br />
+                    <input type="number" name="mobno" required placeholder="Enter Student Mobile number" class="form-control" />
+                </div>
+                <div class="col-sm-3  col-md-3">
+                    <b>Guardian Mobile Number</b>
+                    <input type="number" name="gmobno" required placeholder="Enter Student Guardian Mobile number" class="form-control" />
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 my-2">
+            <div class="row">
+                <div class="col-sm-3  col-md-3">
+                    <b>Adhar Number</b><br />
+                    <input type="number" name="adharnum" min="14" required placeholder="Enter Student Adhar Number" class="form-control" />
+                </div>
+                <div class="col-sm-9  col-md-9">
+                    <b>Address</b><br />
+                    <textarea name="address" class="form-control" required style="resize:none;" placeholder="Enter Student Address"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 my-2">
+            <big><u>Fee Details</u></big>
+            <div class="row mt-2">
+                <div class="col-sm-3  col-md-3">
+                    <b>Total Fee</b><br />
+                    <input type="number" id="fee" name="totalfee" required readonly class="form-control" />
+                </div>
+                <div class="col-sm-3  col-md-3">
+                    <b>Discount</b><br />
+                    <input type="number" id="disc" name="discount" required class="form-control" placeholder="Discount" />
+                </div>
+                <div class="col-sm-3  col-md-3">
+                    <b>Final Fee</b><br />
+                    <input type="number" id="final" name="finalfee" class="form-control" readonly placeholder="Final Fee" />
+                </div>
+                <div class="col-sm-3  col-md-3">
+                    <b>Submitted Fee</b>
+                    <input type="number" id="subfee" name="subfee" required placeholder="Student Submitted Fee" class="form-control" />
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="row">
+                <div class="col-sm-3 col-md-3">
+                    <b>Mode</b>
+                    <select name="feemode" class="form-control" required>
+                        <option selected disabled>--Select Mode--</option>
+                        <option>Online</option>
+                        <option>Offline</option>
+                        <option>Not Paid</option>
+                    </select>
+                </div>
+                <div class="col-sm-3 col-md-3">
+                    <b>Fee Date</b><br />
+                    <input type="Date" name="feedate" id="feedate" required class="form-control" />
+                </div>
+                <div class="col-sm-3 col-md-3">
+                    <b>Remaining Fee</b><br />
+                    <input type="number" name="remaining" id="remaining" readonly class="form-control" />
+                </div>
+                <div class="col-sm-3 col-md-3" id="nextinstall">
+                    <b>Next Installment Date</b>
+                    <input type="date" name="nextinstdate" id="nextinstdate" class="form-control" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <center class="mt-5 mb-2"><input type="submit" value="Submit" class="btn btn-primary font-weight-bold px-4 py-2" /></center>
+</form>
+
+<script src="~/Content/js/jquery-3.7.1.js"></script>
+<script src="~/Content/js/sweetalert.min.js"></script>
+<script>
+    function training1(x) {
+        var id = x.value;
+        generateUniqueId(id);
+        $.ajax({
+            url: '/home/Trainingfee',
+            type: 'get',
+            data: { 'id': id },
+            success: function (res) {
+                $("#disc").val("");
+                $("#final").val("");
+                $("#fee").val(res)
+                finalfee();
+                remaining();
+                nextinst();
+            },
+            error: function () {
+                swal("Error", "Server side Error", "error")
+
+            }
+        })
+    }
+
+    //generate unique id
+    function generateUniqueId(id) {
+        $.ajax({
+            url: '/home/EnrollId',
+            type: 'get',
+            data: { 'id': id },
+            success: function (res) {
+                $("#enrollId").val(res);
+            },
+            error: function () {
+                swal("Error", "Server side Error", "error")
+
+            }
+        })
+    }
+
+
+    //calculate fianl fee after discount
+    let finalfees;
+    function finalfee() {
+        let dis = Number(document.getElementById("disc").value);
+        let total = Number(document.getElementById("fee").value);
+        let fee;
+        if (dis > total) {
+            dis = 0;
+            $("#disc").val(0)
+            fee = Number(total - dis);
+        } else {
+            fee = Number(total - dis);
+        }
+
+        document.getElementById("final").value = fee;
+        finalfees = fee;
+    }
+    document.getElementById("disc").addEventListener("keyup", function () {
+        finalfee();
+        remaining();
+        nextinst();
+
+    })
+    //calculate remaining fee
+    function remaining() {
+        $("#remaining").val(Number($("#final").val()) - Number($("#subfee").val()));
+    }
+    document.getElementById("subfee").addEventListener("keyup", function () {
+        if (Number(this.value) > Number(finalfees)) {
+            $("#subfee").val(finalfees)
+            remaining();
+            nextinst();
+        } else {
+            finalfee();
+            remaining();
+            nextinst();
+        }
+    })
+
+    //installation date show or hide base on submitted fee
+    function nextinst() {
+        if ($("#remaining").val() > 0) {
+            $("#nextinstall").css({ display: "block" });
+            document.getElementById("nextinstdate").setAttribute("min", $("#feedate").val());
+            document.getElementById("nextinstdate").setAttribute("required", "")
+        } else {
+            $("#nextinstall").css({ display: "none" });
+            document.getElementById("nextinstdate").removeAttribute("min");
+            document.getElementById("nextinstdate").removeAttribute("required")
+        }
+    }
+
+    //restriction on nextinstallment
+    document.getElementById("feedate").addEventListener("change", function () {
+        nextinst()
+    })
+</script>

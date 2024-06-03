@@ -1,0 +1,198 @@
+﻿
+@{
+    ViewBag.Title = "feeInvoice";
+    Layout = "~/Views/Shared/GeneralLayout.cshtml";
+}
+
+<style>
+    .printbutton {
+        right: 3%;
+        top: 10%;
+        z-index: 10;
+    }
+</style>
+
+@if (Model != null)
+{
+    <div id="print">
+        <!-- row -->
+        <div class="row">
+            <!-- invoice section -->
+            <div class="col-md-12">
+                <div class="white_shd full margin_bottom_30">
+                    <div class="full graph_head">
+                        <div class="heading1 margin_0">
+                            <h2><i class="fa fa-file-text-o"></i> Invoice</h2>
+                            <button onclick="prints(this)" class="btn btn-danger position-fixed font-weight-bold printbutton">Print</button>
+                        </div>
+                    </div>
+                    <div class="full">
+                        <div class="invoice_inner">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="full invoice_blog padding_infor_info padding-bottom_0">
+                                        <h4>From</h4>
+                                        <p>
+                                            <strong>Techpile Technology Pvt. Ltd.</strong><br>
+                                            Vikash Nagar Sector 5<br>
+                                            Lucknow Up India<br>
+                                            <strong>Phone : </strong><a href="tel:9876543210">9876 543 210</a><br>
+                                            <strong>Email : </strong><a href="mailto:Techpile@gmail.com">Techpile@gmail.com</a>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="full invoice_blog padding_infor_info padding-bottom_0">
+                                        <h4>To</h4>
+                                        <p>
+                                            <strong>@Model["studentname"]</strong><br>
+                                            @Model["collegename"] (@Model["collgecode"])
+                                            <br>
+                                            @Model["course"]<br>
+                                            @Model["year"]<br />
+                                            <strong>Phone : </strong><a href="tel:@Model["mobno"]">@Model["mobno"]</a><br>
+                                            <strong>Email : </strong><a href="mailto:@Model["email"]">@Model["email"]</a>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="full invoice_blog padding_infor_info padding-bottom_0">
+                                        <h4>Invoice No - #@Request.QueryString["id"] </h4>
+                                        <p>
+                                            <strong>Enroll Date : </strong>@Convert.ToDateTime(Model["date"]).ToString("dd-MM-yyyy")<br>
+                                            <strong>Training Type : </strong> @Model["trainingname"] <br />
+                                            <strong>Fee Submitted Date : </strong>@Convert.ToDateTime(Model["feedate"]).ToString("dd-MM-yyyy")<br />
+                                            @if (Model["remaining"] != 0)
+                                            {
+                                                <strong>Next Installment Date : </strong>@Convert.ToDateTime(Model["nextinstallment"]).ToString("dd-MM-yyyy")
+                                            }
+                                            else
+                                            {
+                                               <u><i class="fa-solid fa-check text-success mr-2" style="text-shadow:1px 1px 2px black;"></i>Completely Fee Submitted</u>
+                                            }
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="full padding_infor_info">
+                        <div class="table_row">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Training type</th>
+                                            <th>Year</th>
+                                            <th>Description</th>
+                                            <th>Subtotal</th>
+                                            <th>Submitted</th>
+                                            <th>Remaining</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>@Model["trainingname"]</td>
+                                            <td>@Model["fromyear"]-@Model["toyear"]</td>
+                                            <td>
+                                                @if (Model["remark"] != null)
+                                                {
+                                                    @Model["remark"]
+                                                }
+                                                else
+                                                {
+                                                    <p>Empty</p>
+                                                }
+                                            </td>
+                                            <td>@Model["finalfee"]</td>
+                                            @{int subfee = Convert.ToInt32(Model["subfee"]) + Convert.ToInt32(Model["regfee"]);}
+                                            <td>@subfee</td>
+                                            <td>@Model["remaining"]</td>
+                                        </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- row -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="full white_shd">
+                <div class="full graph_head">
+                    <div class="heading1 margin_0">
+                        <h2>Payment Methods</h2>
+                    </div>
+                </div>
+                <div class="full padding_infor_info">
+                    <ul class="payment_option">
+                        <li><img src="~/Content/images/layout_img/visa.png" alt="#" /></li>
+                        <li><img src="~/Content/images/layout_img/mastercard.png" alt="#" /></li>
+                        <li><img src="~/Content/images/layout_img/american-express.png" alt="#" /></li>
+                        <li><img src="~/Content/images/layout_img/paypal.png" alt="#" /></li>
+                    </ul>
+                    <p class="note_cont text-center">@Model["feemode"]</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="full white_shd">
+                <div class="full graph_head">
+                    <div class="heading1 margin_0">
+                        <h2>Total Amount</h2>
+                    </div>
+                </div>
+                <div class="full padding_infor_info">
+                    <div class="price_table">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <th style="width:50%">Total Training Fee:</th>
+                                        <td>@Model["trainingfee"]</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Discount:</th>
+                                        <td class="text-danger">-@Model["discount"]</td>
+                                    </tr>
+                                    <tr>
+                                        <th>After Discount:</th>
+                                        <td>@Model["finalfee"]</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Submitted:</th>
+                                        <td class="text-danger">-@Model["subfee"]</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Register Fee:</th>
+                                        <td class="text-danger">-@Model["regfee"]</td>
+                                    </tr>
+                                    <tr>
+                                        <th><u>Remaining:</u></th>
+                                        <td class="text-success"><u>@Model["remaining"]</u></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+}
+
+<script>
+    //print invoice
+    function prints(e) {
+        var backup = document.body.innerHTML;
+        e.style.display = "none";
+        var content = document.getElementById("print").innerHTML
+        document.body.innerHTML = content;
+        print()
+        document.body.innerHTML = backup;
+    }
+</script>
+

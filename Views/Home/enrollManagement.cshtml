@@ -1,0 +1,194 @@
+﻿
+@{
+    ViewBag.Title = "enrollManagement";
+    Layout = "~/Views/Shared/GeneralLayout.cshtml";
+}
+
+<h3 class="text-center text-secondary my-4">
+    Enrollment <span class="text-danger">&nbsp;Management..!</span>
+</h3>
+@if (Model != null)
+{
+    if (Model.Rows.Count > 0)
+    {
+        <p>Total Records : <span class="text-primary">@Model.Rows.Count</span></p>
+        int i = 0;
+        <div style="overflow:auto">
+            <table class="table table-bordered" id="mytable">
+                <thead class="table-primary text-dark">
+                    <tr>
+                        <th>Sr</th>
+                        <th>EnrollId</th>
+                        <th>Student Name</th>
+                        <th>Guardian</th>
+                        <th>Mobile Number</th>
+                        <th>Guardian Number</th>
+                        <th>Email</th>
+                        <th>Training</th>
+                        <th>Collage</th>
+                        <th>Course</th>
+                        <th>Year</th>
+                        <th>Adhar Number</th>
+                        <th>Address</th>
+                        <th>Enroll Mode</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (System.Data.DataRow dt in Model.Rows)
+                    {
+                        i++;
+                        <tr>
+                            <td>@i</td>
+                            <td>@dt["enrollid"]</td>
+                            <td id="name_@i">@dt["studentname"]</td>
+                            <td id="gname_@i">@dt["guardian"]</td>
+                            <td id="mobno_@i">@dt["mobno"]</td>
+                            <td id="gmobno_@i">@dt["gmobno"]</td>
+                            <td id="email_@i">@dt["email"]</td>
+                            <td>@dt["trainingname"]</td>
+                            <td>@dt["collegename"]</td>
+                            <td id="course_@i">@dt["course"]</td>
+                            <td id="year_@i">@dt["year"]</td>
+                            <td id="adhar_@i">@dt["adharnumber"]</td>
+                            <td id="address_@i">@dt["address"]</td>
+                            <td>@dt["enrollmode"]</td>
+                            <td>
+                                <a class="btn btn-warning text-primary mb-2" onclick="setenrollData(@i,'@dt["enrollid"]')" data-toggle="modal" data-target="#exampleModal"><i class="fa-solid fa-pen-to-square"></i></a>
+                                <a href="/home/enrollmanagement?id=@dt["enrollid"]" onclick="return confirm('Do You Really Want To Delete?')" class="btn btn-danger"><i class="fa-regular fa-trash-can"></i></a>
+                            </td>
+
+                        </tr>
+                    }
+
+
+
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <h3 class="text-center text-secondary">Records Not Found</h3>
+
+    }
+}
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="max-width:950px;">
+        <div class="modal-content" style="width:70vw;">
+            <div class="modal-header">
+                <h4 class="modal-title font-weight-bold" id="exampleModalLabel">
+                    Update Enrollment Data <span class="text-danger">Here..!</span>
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="border p-4 rounded" method="post" action="/home/editEnroll">
+                    <input type="text" name="enrollid" id="enrollid" hidden />
+                    <div class="row">
+                        <div class="col-sm-12 my-2">
+                            <big><u>Basic Details</u></big>
+                            <div class="row mt-2">
+                                <div class="col-sm-4 col-md-4 col-lg-4">
+                                    <b>Student Name</b><br />
+                                    <input type="text" required name="studentname" id="studentname" placeholder="Enter Student Name" class="form-control" />
+                                </div>
+                                <div class="col-sm-4  col-md-4 col-lg-4">
+                                    <b>Guardian Name</b><br />
+                                    <input type="text" name="gname" required id="gname" class="form-control" placeholder="Enter Student Guardian Name" />
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-lg-4">
+                                    <b>Course</b>
+                                    <select name="course" class="form-control" required id="course">
+                                        <option disabled selected>--select Student Course--</option>
+                                        <option class="course">BCA</option>
+                                        <option class="course">B-TECH (CS)</option>
+                                        <option class="course">B-TECH (IT)</option>
+                                        <option class="course">DIPLOMA (CS)</option>
+                                        <option class="course">DIPLOMA (IT)</option>
+                                        <option class="course">PGDCA</option>
+                                        <option class="course">MCA</option>
+                                        <option class="course">BCA | COMPUTER SCIENCE | OTHER</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 my-2">
+                            <div class="row">
+                                <div class="col-sm-3 col-md-3 col-lg-3">
+                                    <b>Year</b><br />
+                                    <select name="year" class="form-control" required id="year">
+                                        <option disabled selected>--Select Year--</option>
+                                        <option class="year">First Year</option>
+                                        <option class="year">Second Year</option>
+                                        <option class="year">Third Year</option>
+                                        <option class="year">Passed out</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-3  col-md-3 col-lg-3">
+                                    <b>Email Id</b><br />
+                                    <input type="email" name="email" id="email" required placeholder="Enter Student Email Address" class="form-control" />
+                                </div>
+                                <div class="col-sm-3  col-md-3 col-lg-3">
+                                    <b>Mobile Number</b><br />
+                                    <input type="number" name="mobno" id="mobno" required placeholder="Enter Student Mobile number" class="form-control" />
+                                </div>
+                                <div class="col-sm-3  col-md-3 col-lg-3">
+                                    <b>Guardian Mobile Number</b>
+                                    <input type="number" name="gmobno" id="gmobno" required placeholder="Enter Student Guardian Mobile number" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 my-2">
+                            <div class="row">
+                                <div class="col-sm-3  col-md-3 col-lg-3">
+                                    <b>Adhar Number</b><br />
+                                    <input type="number" name="adharnum" id="adharnum" min="14" required placeholder="Enter Student Adhar Number" class="form-control" />
+                                </div>
+                                <div class="col-sm-9  col-md-9 col-lg-9">
+                                    <b>Address</b><br />
+                                    <textarea name="address" class="form-control" id="address" required style="resize:none;" placeholder="Enter Student Address"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="submit" value="Update Enrollment" class="btn btn-primary font-weight-bold" />
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function setenrollData(id, eid) {
+        $("#studentname").val($("#name_" + id).text());
+        $("#gname").val($("#gname_" + id).text());
+        $("#mobno").val($("#mobno_" + id).text());
+        $("#gmobno").val($("#gmobno_" + id).text());
+        $("#email").val($("#email_" + id).text());
+        $("#address").val($("#address_" + id).text());
+        $("#adharnum").val($("#adhar_" + id).text());
+        $("#enrollid").val(eid);
+
+        let courselist = document.querySelectorAll(".course")
+        courselist.forEach(function (e) {
+            if (e.value == $("#course_" + id).text()) {
+                e.setAttribute("selected", "")
+            }
+        })
+        let yearlist = document.querySelectorAll(".year")
+        yearlist.forEach(function (e) {
+            if (e.value == $("#year_" + id).text()) {
+                e.setAttribute("selected", "")
+            }
+        })
+    }
+</script>

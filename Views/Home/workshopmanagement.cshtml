@@ -1,0 +1,117 @@
+﻿
+@{
+    ViewBag.Title = "workshopmanagement";
+    Layout = "~/Views/Shared/GeneralLayout.cshtml";
+}
+
+<h3 class="text-center text-secondary my-4">
+    Workshop Data <span class="text-danger">&nbsp;Management..!</span>
+</h3>
+<div class="my-4">
+    <select class="form-control w-50 mx-auto" name="collage" required id="collage">
+        <option disabled selected>--select Collage name--</option>
+        @if (Model != null)
+        {
+            if (Model.Tables[0].Rows.Count > 0)
+            {
+                foreach (System.Data.DataRow dt in Model.Tables[0].Rows)
+                {
+                    <option value="@dt["id"]">@dt["name"] (@Convert.ToDateTime(dt["workshopdate"]).ToString("dd-MM-yyyy"))</option>
+                }
+            }
+        }
+    </select>
+</div>
+
+@if (Model != null)
+{
+    if (Model.Tables[1].Rows.Count > 0)
+    {
+        <p>Total Records : <span class="text-primary">@Model.Tables[1].Rows.Count</span> <a href="/home/workshopmanagement" class="float-right">Show All Records</a></p>
+        <div style="overflow:auto;">
+            <table class="table table-bordered" id="mytable" >
+                <thead class="table-primary text-dark font-weight-bold">
+                    <tr>
+                        <th>Sr</th>
+                        <th>Student Name</th>
+                        <th>Collage Name</th>
+                        <th>Branch</th>
+                        <th>Year</th>
+                        <th>Mobile Number</th>
+                        <th>Email</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        if (Model != null)
+                        {
+                            if (Model.Tables[1].Rows.Count > 0)
+                            {
+                                int count = 0;
+                                foreach (System.Data.DataRow dt in Model.Tables[1].Rows)
+                                {
+                                    count++;
+                                    <tr>
+                                        <td>@count</td>
+                                        <td>@dt["studentname"]</td>
+                                        <td>@dt["collegename"]</td>
+                                        <td>@dt["branch"]</td>
+                                        <td>@dt["year"]</td>
+                                        <td>@dt["mobno"]</td>
+                                        <td>@dt["email"]</td>
+                                        <td class="text-center">
+                                            @if (Model != null)
+                                            {
+                                                if (Model.Tables[2].Rows.Count > 0)
+                                                {
+                                                    int check = 0;
+                                                    foreach (System.Data.DataRow dts in Model.Tables[2].Rows)
+                                                    {
+                                                        if (dts["email"].Equals(dt["email"]))
+                                                        {
+                                                            check++;
+                                                        }
+                                                    }
+
+
+                                                    if (check > 0)
+                                                    {
+
+
+                                                        @:<center><i class="fa-solid fa-check text-primary" style="text-shadow:2px 1px 2px black;font-size:20px;"></i></center>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a href="/home/AddRegisterationIndirect?id=@dt["id"]" class="btn btn-success">Mark as Register</a>
+
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <a href="/home/AddRegisterationIndirect?id=@dt["id"]" class="btn btn-success">Mark as Register</a>
+
+                                                }
+                                            }
+                                            <a href="/home/workshopmanagement?deleteid=@dt["id"]" onclick="return confirm('Do You Really Want To Delete?')" class="btn btn-danger mt-2"><i class="fa-regular fa-trash-can"></i></a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    }
+                </tbody>
+            </table>
+            </div>
+            }
+            else
+            {
+            <h3 class="text-center text-secondary mt-5 mb-3">Records Not Found..!</h3>
+            <center><a href="/home/workshopmanagement" class="btn btn-outline-primary">Show All Records</a></center>
+            }
+            }
+            <script>
+                document.getElementById("collage").addEventListener("change", function () {
+                    location.href = "/home/workshopmanagement?id=" + this.value;
+                })
+            </script>

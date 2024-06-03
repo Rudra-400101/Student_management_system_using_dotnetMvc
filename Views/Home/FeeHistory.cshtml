@@ -1,0 +1,73 @@
+﻿
+@{
+    ViewBag.Title = "FeeHistory";
+    Layout = "~/Views/Shared/GeneralLayout.cshtml";
+}
+
+
+<h3 class="text-center text-secondary my-4">
+    Student Fee <span class="text-danger">&nbsp;History..!</span>
+</h3>
+@if (Model != null)
+{
+    if (Model.Rows.Count > 0)
+    {
+        int count = 0;
+
+        <p>Total Records : <span class="text-primary">@Model.Rows.Count</span></p>
+        <div style="overflow:auto;">
+            <table class="table table-bordered" id="mytable">
+                <thead class="table-primary text-dark">
+                    <tr>
+                        <th>Sr</th>
+                        <th>EnrollId</th>
+                        <th>StudentName</th>
+                        <th>EnrollMode</th>
+                        <th>TotalFee</th>
+                        <th>Discount</th>
+                        <th>FinalFee</th>
+                        <th>RegisterFee</th>
+                        <th>SubmitFee</th>
+                        <th>FeeMode</th>
+                        <th>FeeDate</th>
+                        <th>Remaining</th>
+                        <th>NextInstallment</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (System.Data.DataRow dt in Model.Rows)
+                    {
+                        count++;
+                        <tr>
+                            <td>@count</td>
+                            <td>@dt["enrollid"]</td>
+                            <td>@dt["studentname"]</td>
+                            <td>@dt["enrollmode"]</td>
+                            <td>@dt["totalfee"]</td>
+                            <td>@dt["discount"]</td>
+                            <td>@dt["finalfee"]</td>
+                            <td>@dt["regfee"]</td>
+                            <td>@dt["subfee"]</td>
+                            <td>@dt["feemode"]</td>
+                            <td>@Convert.ToDateTime(dt["feedate"]).ToString("dd-MM-yyyy")</td>
+                            <td>@dt["remaining"]</td>
+                            <td>@Convert.ToDateTime(dt["nextinstallment"]).ToString("dd-MM-yyyy")</td>
+                            <td>
+                                <a href="/home/FeeHistory?deleteid=@dt["id"]" onclick="return confirm('Do You Really Want To Delete?')" class="btn btn-danger mt-2"><i class="fa-regular fa-trash-can"></i></a>
+                            </td>
+                        </tr>
+                    }
+
+
+
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <h3 class="text-center text-secondary mt-5 mb-3">Records Not Found..!</h3>
+
+    }
+}

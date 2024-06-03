@@ -1,0 +1,29 @@
+﻿
+@{
+    ViewBag.Title = "AddCollege";
+    Layout = "~/Views/Shared/GeneralLayout.cshtml";
+}
+
+<style>
+    form {
+        box-shadow: 2px 2px 10px grey;
+    }
+</style>
+
+<form class="w-50 mx-auto my-5 border p-4 rounded" method="post">
+    <h3 class="text-center my-3">Add Collage Data <span class="text-danger">Here..!</span></h3>
+    <label class="w-100">
+        <b>Collage Name</b><br />
+        <input type="text" placeholder="Please Enter Collage Name" required name="collegename" class="form-control" />
+    </label>
+    <label class="w-100">
+        <b>Collage Code</b>
+        <input type="text" placeholder="Please Enter Collage Code" required name="collegecode" class="form-control" />
+    </label>
+    <label class="w-100">
+        <b>Remark (Optional)</b>
+        <textarea rows="5" class="form-control" style="resize:none;" name="remark" placeholder="Write Somthing Here..."></textarea>
+    </label>
+    <input type="submit" value="Add Collage" class="btn btn-primary font-weight-bold" />
+</form>
+

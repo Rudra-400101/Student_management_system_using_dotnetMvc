@@ -1,0 +1,121 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/GeneralLayout.cshtml";
+}
+
+<style>
+    .hover,i{
+        cursor:pointer;
+        transition:.5s;
+    }
+    .hover:hover,.hover:hover i{
+        transform:scale(1.1);
+    }
+</style>
+
+<div class="row column1 my-3">
+    <div class="col-md-6 col-lg-3 hover">
+        <a href="/home/collagemanagement">
+            <div class="full counter_section margin_bottom_30 yellow_bg">
+                <div class="couter_icon">
+                    <div>
+                        <i class="fa-solid fa-building-columns"></i>
+                    </div>
+                </div>
+                <div class="counter_no">
+                    <div>
+                        <p class="total_no text-light">@Model.Tables[0].Rows[0]["totalcollage"]</p>
+                        <p class="head_couter"> Collage</p>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-6 col-lg-3 hover">
+        <a href="/home/trainingmanagement">
+            <div class="full counter_section margin_bottom_30 blue1_bg">
+                <div class="couter_icon">
+                    <div>
+                        <i class="fa-solid fa-list-check"></i>
+                    </div>
+                </div>
+                <div class="counter_no">
+                    <div>
+                        <p class="total_no text-light">@Model.Tables[0].Rows[0]["totaltraining"]</p>
+                        <p class="head_couter"> Training</p>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-6 col-lg-3 hover">
+        <a href="/home/workshop">
+            <div class="full counter_section margin_bottom_30 green_bg">
+                <div class="couter_icon">
+                    <div>
+                        <i class="fa-solid fa-warehouse"></i>
+                    </div>
+                </div>
+                <div class="counter_no">
+                    <div>
+                        <p class="total_no text-light">@Model.Tables[0].Rows[0]["totalWorkshop"]</p>
+                        <p class="head_couter"> Workshop</p>
+                    </div>
+                </div>
+            </div>
+            </a>
+    </div>
+    <div class="col-md-6 col-lg-3 hover">
+        <a href="/home/workshopmanagement">
+            <div class="full counter_section margin_bottom_30 red_bg">
+                <div class="couter_icon">
+                    <div>
+                        <i class="fa-solid fa-mountain-city"></i>
+                    </div>
+                </div>
+                <div class="counter_no">
+                    <div>
+                        <p class="total_no text-light">@Model.Tables[0].Rows[0]["totalworkshopdata"]</p>
+                        <p class="head_couter"> WorkshopData</p>
+                    </div>
+                </div>
+            </div>
+            </a>
+    </div>
+    <div class="col-md-6 col-lg-3 hover">
+        <a href="/home/registerationmanagement">
+            <div class="full counter_section margin_bottom_30 bg-success">
+                <div class="couter_icon">
+                    <div>
+                        <i class="fa-solid fa-id-card"></i>
+                    </div>
+                </div>
+                <div class="counter_no">
+                    <div>
+                        <p class="total_no text-light">@Model.Tables[0].Rows[0]["totalRegister"]</p>
+                        <p class="head_couter"> Registeration</p>
+                    </div>
+                </div>
+            </div>
+            </a>
+    </div>
+    <div class="col-md-6 col-lg-3 hover">
+        <a href="/home/enrollmanagement">
+            <div class="full counter_section margin_bottom_30 bg-info">
+                <div class="couter_icon">
+                    <div>
+                        <i class="fa fa-table"></i>
+                    </div>
+                </div>
+                <div class="counter_no">
+                    <div>
+                        <p class="total_no text-light">@Model.Tables[0].Rows[0]["totalenroll"]</p>
+                        <p class="head_couter"> Enrollment</p>
+                    </div>
+                </div>
+            </div>
+            </a>
+    </div>
+</div>
+

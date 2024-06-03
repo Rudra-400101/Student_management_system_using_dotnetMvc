@@ -1,0 +1,226 @@
+﻿
+@{
+    ViewBag.Title = "AddRegisterationIndirect";
+    Layout = "~/Views/Shared/GeneralLayout.cshtml";
+}
+
+<style>
+    .card {
+        box-shadow: 2px 2px 5px grey;
+    }
+</style>
+
+<div class="row">
+    <div class="col-sm-12 mx-auto mt-3 card px-5 py-3 shadow">
+        <h3 class="text-center">Student <span class="text-danger my-3">Registeration</span></h3>
+        <form method="post" action="/home/AddRegisteration">
+            <div class="row">
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-sm-6">
+
+                            @if (Model != null)
+                            {
+                                if (Model.Tables[2].Rows.Count > 0)
+                                {
+                                    <input type="text" hidden value="@Model.Tables[2].Rows[0]["branch"]" id="branch" />
+                                    <input type="text" hidden value="@Model.Tables[2].Rows[0]["year"]" id="year" />
+                                    <input type="text" hidden value="@Model.Tables[2].Rows[0]["collageId"]" id="collageId" />
+                                    <input type="number" hidden name="di" value="1" />
+                                }
+                            }
+
+                            <input name="studentname" class="form-control bord" value="@Model.Tables[2].Rows[0]["studentname"]" type="text" required placeholder="Enter Student Name" />
+                        </div>
+                        <div class="col-sm-6">
+
+                            <select name="course" class="form-control" required>
+                                <option disabled selected>--select Student Course--</option>
+                                <option class="course">BCA</option>
+                                <option class="course">B-TECH (CS)</option>
+                                <option class="course">B-TECH (IT)</option>
+                                <option class="course">DIPLOMA (CS)</option>
+                                <option class="course">DIPLOMA (IT)</option>
+                                <option class="course">PGDCA</option>
+                                <option class="course">MCA</option>
+                                <option class="course">BCA | COMPUTER SCIENCE | OTHER</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <select name="year" class="form-control mt-3" required>
+                                <option selected disabled>--Select Student Year--</option>
+                                <option class="year">First Year</option>
+                                <option class="year">Second Year</option>
+                                <option class="year">Third Year</option>
+                                <option class="year">Fourth Year</option>
+                                <option class="year">Passed out</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-6">
+                            <input name="mobno" class="form-control bord mt-3" value="@Model.Tables[2].Rows[0]["mobno"]" required type="number" placeholder="Enter Mobile Number" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <input name="email" class="form-control bord mt-3" required value="@Model.Tables[2].Rows[0]["email"]" type="email" placeholder="Enter Email Address" />
+                        </div>
+                        <div class="col-sm-6">
+                            <!--College Drop-->
+                            <select name="collage" class="form-control mt-3" required>
+                                <option>--Select College--</option>
+                                @{
+                                    if (Model != null)
+                                    {
+                                        if (Model.Tables[0].Rows.Count > 0)
+                                        {
+                                            foreach (System.Data.DataRow x in Model.Tables[0].Rows)
+                                            {
+                                                <option class="collage" value="@x["id"]">@x["collegename"]</option>
+                                            }
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <!--College end-->
+                            <!--Select drop Training-->
+                            <select onchange="training1(this)" name="training" class="form-control mt-3" required>
+                                <option selected disabled>--Select Training--</option>
+                                @{
+                                    if (Model != null)
+                                    {
+                                        if (Model.Tables[1].Rows.Count > 0)
+                                        {
+                                            foreach (System.Data.DataRow z in Model.Tables[1].Rows)
+                                            {
+                                                <option value="@z["id"]">@z["Trainingname"]</option>
+                                            }
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-sm-6">
+                            <input class='form-control mt-3' id="fee" name="fee" readonly type="number" placeholder="Training Fee">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <input id="disc" name="discount" class="form-control mt-3" required type="number" placeholder="Discount" />
+                        </div>
+                        <div class="col-sm-6">
+                            <input type="number" class="form-control mt-3" id="final" required name="finalfee" readonly placeholder="Final Fee" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <input type="number" class="form-control mt-3" id="regfee" required name="regfee" placeholder="Register Fee" />
+                        </div>
+                        <div class="col-sm-6">
+                            <input type="number" class="form-control mt-3" id="remaining" readonly name="remaining" placeholder="Remaining Fee" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 my-3">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <select name="mode" class="form-control" required>
+                                <option disabled selected>--Select Mode--</option>
+                                <option>Online</option>
+                                <option>Offline</option>
+                                <option>Not paid</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-6">
+                            <!--Select drop Training end-->
+                            <input class="form-control btn btn-outline-dark " value="Register" type="submit" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!--Form Add Training end-->
+<script src="~/Content/js/jquery-3.7.1.js"></script>
+<script src="~/Content/js/sweetalert.min.js"></script>
+<script>
+    //get training fee
+    function training1(x) {
+        var id = x.value;
+        $.ajax({
+            url: '/home/Trainingfee',
+            type: 'get',
+            data: { 'id': id },
+            success: function (res) {
+                $("#disc").val("");
+                $("#final").val("");
+                $("#fee").val(res)
+
+            },
+            error: function () {
+                swal("Error", "Server side Error", "error")
+
+            }
+        })
+    }
+
+    //calculate fianl fee after discount
+    document.getElementById("disc").addEventListener("keyup", function () {
+        let dis = Number(document.getElementById("disc").value);
+        let total = Number(document.getElementById("fee").value);
+        let fee = Number(total - dis);
+        document.getElementById("final").value=fee;
+    })
+
+    //calculate remaining fee
+    document.getElementById("regfee").addEventListener("keyup", function (e) {
+        $("#remaining").val(Number($("#final").val()) - Number($("#regfee").val()));
+    })
+
+    //select student data according to their workshopdata
+
+    function selectData() {
+
+        let branch = $("#branch").val();
+        let year = $("#year").val();
+        let collageId = $("#collageId").val()
+        let course = document.querySelectorAll(".course")
+        let yearlist = document.querySelectorAll(".year")
+        let collagelist = document.querySelectorAll(".collage")
+        course.forEach(function (e) {
+            if (e.value == branch) {
+                e.setAttribute("selected","")
+            }
+        })
+        yearlist.forEach(function (e) {
+            if (e.value == year) {
+                e.setAttribute("selected", "")
+            }
+        })
+        collagelist.forEach(function (e) {
+            if (e.value == collageId) {
+                e.setAttribute("selected", "")
+            }
+        })
+    }
+    selectData();
+</script>
+
+
+
